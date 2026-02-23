@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portfolio of professional work and projects"
+    />
+    <title>Portfolio - Projects</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- ============================================
+         HEADER - Edit logo/name and nav links here
+         ============================================ -->
+    <header>
+      <nav>
+        <a href="index.html" class="logo"
+          >Saul Roland - Production Professional</a
+        >
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="portfolio.html" class="active">Portfolio</a></li>
+        </ul>
+        <div class="header-actions">
+          <a
+            href="assets/cv.pdf"
+            class="btn btn-header btn-header-cv"
+            target="_blank"
+            rel="noopener noreferrer"
+            >View CV</a
+          >
+          <a
+            href="portfolio.html#contact"
+            class="btn btn-header btn-header-contact"
+            >Contact Me</a
+          >
+        </div>
+      </nav>
+    </header>
+
+    <!-- ============================================
+         MAIN CONTENT
+         ============================================ -->
+    <main>
+      <div class="container">
+        <!-- <h1 class="page-title">Portfolio</h1> -->
+
+        <!-- ============================================
+                 PORTFOLIO LIST - Add/remove/edit project items here
+                 
+                 To add a new project:
+                 1. Copy the entire .portfolio-item div below
+                 2. Update the image path in src="assets/portfolio/your-image.jpg"
+                 3. Update the alt text to describe the image
+                 4. Update the project title in <h3>
+                 5. Update the project description in <p>
+                 
+                 To remove a project, delete the entire .portfolio-item div
+                 ============================================ -->
+        <div class="portfolio-list">
+          <!-- PROJECT ITEM 1 - Edit or duplicate this section -->
+          <div class="portfolio-item">
+            <div class="portfolio-item-image-wrapper">
+              <img
+                src="assets/portfolio/DelveDeep.avif"
+                alt="Project 1 Description"
+                class="portfolio-item-image"
+              />
+            </div>
+            <div class="portfolio-item-content">
+              <h3>Delve Deep</h3>
+              <p>
+                I am currently working as the sole project manager for Delve
+                Deep, a dungeon crawler mixing elements of Diablo and XCOM. I am
+                managing a small team of other students using Basecamp as our
+                management tool. I run weekly sprints, ensuring milestones are
+                met.
+              </p>
+            </div>
+          </div>
+
+          <!-- PROJECT ITEM 2 - Edit or duplicate this section -->
+          <div class="portfolio-item">
+            <div class="portfolio-item-image-wrapper">
+              <img
+                src="assets/portfolio/ThreadAndNeedle.avif"
+                alt="Project 2 Description"
+                class="portfolio-item-image"
+              />
+            </div>
+            <div class="portfolio-item-content">
+              <h3>Thread & Needle</h3>
+              <p>
+                My work at Hovi Production continues where I am the assistant
+                proect manager for an unreleased title. The game is a fashion
+                management game where you design clothes, run a studio with an
+                outlet shop, and sell your creations to the townspeople.
+              </p>
+            </div>
+          </div>
+
+          <!-- PROJECT ITEM 3 - Edit or duplicate this section -->
+          <div class="portfolio-item">
+            <div class="portfolio-item-image-wrapper">
+              <img
+                src="assets/portfolio/SlugWars.avif"
+                alt="Project 3 Description"
+                class="portfolio-item-image"
+              />
+            </div>
+            <div class="portfolio-item-content">
+              <h3>Slug Wars</h3>
+              <p>
+                Slug Wars At Hovi Production, I worked on Slug Wars, an online
+                multiplayer 3rd-person shooter, where you play as cute Slugs,
+                and after being eliminated you get to choose a power up!
+                <br />
+                <br />My key responsibilities included:
+
+                <br />• Creating documentation <br />• Helping leads with the
+                management of small teams <br />• Creating timelines and
+                backlogs to help with the planning of new projects <br />•
+                Managing developer workload using Jira and Basecamp
+              </p>
+            </div>
+          </div>
+
+          <!-- 
+                    TO ADD MORE PROJECTS:
+                    Copy one of the .portfolio-item divs above and paste it here.
+                    Update the image path, title, and description.
+                -->
+        </div>
+      </div>
+    </main>
+
+    <section class="contact-section" id="contact">
+      <div class="container">
+        <div class="contact-cta" id="contactCta">
+          <h2>
+            Have projects in mind?<br />Let's work
+            <span class="contact-cta-highlight">together</span>
+          </h2>
+          <p class="contact-cta-tagline">
+            I'm Saul Roland, a production professional who works with teams to
+            bring creative visions to life.
+          </p>
+          <button
+            type="button"
+            class="btn contact-cta-button"
+            id="contactRevealBtn"
+          >
+            Get in touch
+          </button>
+        </div>
+        <div class="contact-form-wrapper" id="contactFormWrapper" hidden>
+          <h2>Contact Me</h2>
+          <p class="contact-intro">
+            If you have any questions or would like to get in touch, please use
+            the form below.
+          </p>
+          <form
+            class="contact-form"
+            action="https://formspree.io/f/YOUR_FORM_ID"
+            method="POST"
+          >
+            <label for="contact-name">Name</label>
+            <input
+              type="text"
+              id="contact-name"
+              name="name"
+              placeholder="Your Name"
+              required
+            />
+            <label for="contact-email">Email Address</label>
+            <input
+              type="email"
+              id="contact-email"
+              name="email"
+              placeholder="Your Email"
+              required
+            />
+            <label for="contact-subject">Subject</label>
+            <input
+              type="text"
+              id="contact-subject"
+              name="subject"
+              placeholder="Subject"
+            />
+            <label for="contact-message">Message</label>
+            <textarea
+              id="contact-message"
+              name="message"
+              placeholder="Your Message"
+              rows="5"
+              required
+            ></textarea>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER - Edit contact information here
+         ============================================ -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>Phone</h3>
+            <p><a href="tel:+358449892156">(+358) 44 989 2156</a></p>
+          </div>
+          <div class="footer-section">
+            <h3>Email</h3>
+            <p>
+              <a href="mailto:saul@rolandfamily.co.uk"
+                >saul@rolandfamily.co.uk</a
+              >
+            </p>
+          </div>
+          <div class="footer-section">
+            <h3>Follow Me</h3>
+            <p>
+              <a
+                href="https://www.linkedin.com/in/your-profile"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="linkedin-link"
+                >in</a
+              >
+            </p>
+          </div>
+          <div class="footer-section footer-copyright">
+            <p id="copyright-year">&copy; 2025- By Saul Roland.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
