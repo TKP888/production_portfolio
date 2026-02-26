@@ -166,6 +166,43 @@ main {
 }
 
 /* ============================================
+   DOT TEXTURE (hero + portfolio main)
+   ============================================ */
+.dot-texture-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle dot texture: orange, low opacity, denser towards bottom */
+.dot-texture-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: repeating-radial-gradient(
+    circle at center,
+    rgba(238, 163, 2, 0.14) 0px,
+    transparent 1.5px
+  );
+  background-size: 10px 10px;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 50%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 50%);
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  pointer-events: none;
+}
+
+.dot-texture-bg .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Portfolio page: main section fills viewport */
+main.dot-texture-bg {
+  min-height: 100vh;
+}
+
+/* ============================================
    HERO SECTION
    ============================================ */
 .hero {
@@ -329,11 +366,7 @@ main {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(
-    90deg,
-    var(--surface-card),
-    var(--text-muted)
-  );
+  background: linear-gradient(90deg, var(--surface-card), var(--text-muted));
   border-radius: 12px 12px 0 0;
 }
 
@@ -431,7 +464,7 @@ main {
 }
 
 .contact-cta h2 {
-  font-size: clamp(1.75rem, 3.25vw, 4rem);
+  font-size: clamp(1.75rem, 3.25vw, 3.8rem);
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0;
