@@ -163,6 +163,10 @@ main {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }
 
 /* ============================================
@@ -377,7 +381,7 @@ main.dot-texture-bg {
 
 .portfolio-item-image {
   flex-shrink: 0;
-  width: 300px;
+  width: 360px;
   min-height: 200px;
   object-fit: cover;
   object-position: center top;
@@ -387,7 +391,7 @@ main.dot-texture-bg {
 
 .portfolio-item-image-wrapper {
   flex-shrink: 0;
-  width: 300px;
+  width: 360px;
   min-height: 200px;
   align-self: stretch;
   overflow: hidden;
@@ -409,16 +413,42 @@ main.dot-texture-bg {
   padding: 2rem 2rem 2rem 0;
 }
 
-.portfolio-item h3 {
-  font-size: 1.5rem;
-  margin-bottom: 0.75rem;
+.portfolio-item-title {
+  font-size: 1.75rem;
+  font-weight: 700;
   color: var(--text-primary);
+  margin-bottom: 0.35rem;
+  line-height: 1.2;
 }
 
-.portfolio-item p {
+.portfolio-item-client {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.portfolio-item-meta {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.portfolio-item-meta .portfolio-item-role,
+.portfolio-item-meta .portfolio-item-dates {
+  display: block;
+}
+
+.portfolio-item-overview {
   color: var(--text-muted);
   font-size: 1rem;
   line-height: 1.7;
+  margin-bottom: 0;
+}
+
+.portfolio-item-overview + .portfolio-item-overview {
+  margin-top: 0.75rem;
 }
 
 /* ============================================
@@ -617,9 +647,15 @@ main.dot-texture-bg {
    ============================================ */
 footer {
   background-color: var(--secondary-dark);
-  padding: 1rem 2rem;
+  padding: 1rem 3rem;
   margin-top: auto;
   border-top: 1px solid var(--surface-card);
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
 }
 
 .footer-content {
