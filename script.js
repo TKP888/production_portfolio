@@ -151,6 +151,63 @@ document.addEventListener("DOMContentLoaded", function () {
       contactObserver.observe(contactSection);
     }
   }
+
+  // ============================================
+  // Portfolio carousel – prev/next
+  // ============================================
+  const portfolioCarousel = document.querySelector(".portfolio-carousel");
+  if (portfolioCarousel) {
+    const portfolioList = portfolioCarousel.querySelector(".portfolio-list");
+    const prevBtn = portfolioCarousel.querySelector(
+      ".portfolio-carousel__btn--prev"
+    );
+    const nextBtn = portfolioCarousel.querySelector(
+      ".portfolio-carousel__btn--next"
+    );
+    if (portfolioList && prevBtn && nextBtn) {
+      const items = portfolioList.querySelectorAll(".portfolio-item");
+      if (items.length > 0) {
+        function getScrollDelta() {
+          const item = items[0];
+          if (!item) return 0;
+          const gapStr = getComputedStyle(portfolioList).gap;
+          const gap = parseFloat(gapStr) || 0;
+          return item.offsetWidth + gap;
+        }
+
+        function updateCarouselUi() {
+          const maxScroll = Math.max(
+            0,
+            portfolioList.scrollWidth - portfolioList.clientWidth
+          );
+          const left = portfolioList.scrollLeft;
+          prevBtn.disabled = left <= 1;
+          nextBtn.disabled = left >= maxScroll - 1;
+        }
+
+        prevBtn.addEventListener("click", function () {
+          const delta = getScrollDelta();
+          if (delta) {
+            portfolioList.scrollBy({ left: -delta, behavior: "smooth" });
+          }
+        });
+        nextBtn.addEventListener("click", function () {
+          const delta = getScrollDelta();
+          if (delta) {
+            portfolioList.scrollBy({ left: delta, behavior: "smooth" });
+          }
+        });
+
+        portfolioList.addEventListener("scroll", updateCarouselUi);
+        window.addEventListener("resize", updateCarouselUi);
+        if (window.ResizeObserver) {
+          const portfolioRo = new ResizeObserver(updateCarouselUi);
+          portfolioRo.observe(portfolioList);
+        }
+        updateCarouselUi();
+      }
+    }
+  }
 });
 
 // ============================================

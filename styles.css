@@ -7,6 +7,11 @@
   --surface-card: #eea302;
   --text-primary: #f5f2fa;
   --text-muted: #c9bdd9;
+  /* Single reserve: symmetric body padding + viewport calcs for fixed header/footer */
+  /* Fits fixed header/footer box + border; raise if nav/footer clips */
+  --chrome-band: 104px;
+  --footer-height: var(--chrome-band);
+  --header-height: var(--chrome-band);
   /* --primary-dark: #121826;
   --secondary-dark: #1B2336;
   --surface-card: #EEA302;
@@ -37,12 +42,24 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-top: var(--chrome-band);
+  padding-bottom: var(--chrome-band);
 }
 
 /* ============================================
    HEADER & NAVIGATION
    ============================================ */
 header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--chrome-band);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  overflow: hidden;
   background: linear-gradient(
     to bottom,
     var(--primary-dark) 100%,
@@ -50,19 +67,22 @@ header {
 
     transparent 100%
   );
-  padding: 1rem 2rem;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  flex-shrink: 0;
+  border-bottom: 1px solid var(--surface-card);
 }
 
 /* First screen: header + hero = one viewport (index page) */
 .viewport-top {
-  height: 100vh;
+  height: calc(100vh - var(--footer-height) - var(--header-height));
   display: flex;
   flex-direction: column;
   min-height: 0;
+}
+
+/* Fixed header does not consume flex row height */
+.viewport-top > header {
+  flex: 0 0 0;
+  min-height: 0;
+  overflow: visible;
 }
 
 .viewport-top main {
@@ -74,8 +94,10 @@ header {
 }
 
 nav {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  min-height: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -84,10 +106,28 @@ nav {
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
+  color: var(--text-primary);
+  padding: 0.15rem 0.6rem;
+}
+
+.logo-img {
+  height: calc(1.25rem * 0.9);
+  width: auto;
+  display: block;
+}
+
+/* Desktop: match header .btn.btn-header height (.btn padding + line box + borders) */
+@media (min-width: 769px) {
+  .logo-img {
+    height: calc(0.9 * (3rem + 4px));
+  }
+
+  nav {
+    flex-wrap: nowrap;
+  }
 }
 
 .nav-links {
@@ -162,11 +202,20 @@ main {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
-  min-height: 100vh;
+  /* padding: 2rem; */
   align-items: center;
   justify-content: center;
   display: flex;
+}
+
+/* Portfolio: fill viewport band below fixed header; wider column for carousel */
+main.dot-texture-bg > .container {
+  min-height: calc(100vh - var(--footer-height) - var(--header-height));
+  flex-direction: column;
+  width: 100%;
+  max-width: min(1500px, 96vw);
+  justify-content: center;
+  align-items: stretch;
 }
 
 /* ============================================
@@ -203,7 +252,7 @@ main {
 
 /* Portfolio page: main section fills viewport */
 main.dot-texture-bg {
-  min-height: 100vh;
+  min-height: calc(100vh - var(--footer-height) - var(--header-height));
 }
 
 /* ============================================
@@ -215,14 +264,24 @@ main.dot-texture-bg {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 4rem 2rem;
+  padding: clamp(0.5rem, 1.5vh, 1.25rem) 1.25rem;
+}
+
+/* Home hero: fill band between header/footer; wider column than global .container */
+.hero .container {
+  min-height: 0;
+  flex: 1;
+  width: 100%;
+  max-width: min(1400px, 100%);
+  /* padding: 1rem 1.25rem; */
 }
 
 .hero-content {
   display: flex;
   align-items: center;
   gap: 4rem;
-  max-width: 1200px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -341,26 +400,133 @@ main.dot-texture-bg {
   color: var(--text-primary);
 }
 
-.portfolio-list {
+.portfolio-carousel {
+  --portfolio-band: calc(100vh - var(--header-height) - var(--footer-height));
+  --carousel-arrow-gap: 0.85rem;
+  position: relative;
+  padding: 0;
+  margin-bottom: 0;
+  width: 100%;
+  height: calc(var(--portfolio-band) * 0.9);
+  min-height: 0;
+  max-height: calc(var(--portfolio-band) * 0.9);
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  margin-bottom: 3rem;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: var(--carousel-arrow-gap);
+}
+
+.portfolio-carousel__btn {
+  position: relative;
+  z-index: 5;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  align-self: center;
+  border-radius: 50%;
+  border: 1px solid var(--surface-card);
+  background: var(--secondary-dark);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  line-height: 1;
+  padding: 0;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.portfolio-carousel__btn:hover {
+  background: var(--surface-card);
+  color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.portfolio-carousel__btn:focus-visible {
+  outline: 2px solid var(--surface-card);
+  outline-offset: 3px;
+}
+
+.portfolio-carousel__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.portfolio-list {
+  --portfolio-gap: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: var(--portfolio-gap);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  padding: 0.5rem 0;
+  margin-bottom: 0;
+  scroll-behavior: smooth;
+  scroll-snap-type: none;
+  scroll-padding-inline: 0.5rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.portfolio-list::-webkit-scrollbar {
+  display: none;
 }
 
 .portfolio-item {
   position: relative;
+  flex: 0 0 calc((100% - 2 * var(--portfolio-gap)) / 3 * 1.25);
+  width: calc((100% - 2 * var(--portfolio-gap)) / 3 * 1.25);
+  max-width: none;
+  min-height: 0;
+  height: 100%;
+  scroll-snap-align: start;
   background-color: var(--secondary-dark);
   border-radius: 12px;
   overflow: hidden;
   display: flex;
-  gap: 2rem;
+  flex-direction: column;
+  gap: 0;
   padding: 0;
   padding-top: 4px;
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 900px) {
+  .portfolio-list {
+    --portfolio-gap: 1.25rem;
+  }
+
+  .portfolio-item {
+    flex: 0 0 calc((100% - 1 * var(--portfolio-gap)) / 2 * 1.25);
+    width: calc((100% - 1 * var(--portfolio-gap)) / 2 * 1.25);
+  }
+}
+
+@media (max-width: 600px) {
+  .portfolio-item {
+    flex: 0 0 calc(100% * 1.25);
+    width: calc(100% * 1.25);
+  }
 }
 
 .portfolio-item::before {
@@ -375,46 +541,50 @@ main.dot-texture-bg {
 }
 
 .portfolio-item:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
 }
 
 .portfolio-item-image {
-  flex-shrink: 0;
-  width: 360px;
-  min-height: 200px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: center top;
-  border-radius: 0 8px 8px 0;
-  align-self: stretch;
+  object-position: center center;
+  display: block;
 }
 
 .portfolio-item-image-wrapper {
   flex-shrink: 0;
-  width: 360px;
-  min-height: 200px;
-  align-self: stretch;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  min-height: 0;
   overflow: hidden;
-  border-radius: 0 8px 8px 0;
+  border-radius: 12px 12px 0 0;
 }
 
 .portfolio-item-image-wrapper .portfolio-item-image {
   width: 100%;
   height: 100%;
   min-height: 0;
-  display: block;
+  object-fit: cover;
+  object-position: center center;
 }
 
 .portfolio-item-content {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 2rem 2rem 2rem 0;
+  justify-content: flex-start;
+  overflow-y: auto;
+  padding: 1.25rem 1.25rem 1.75rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .portfolio-item-title {
-  font-size: 1.75rem;
+  font-size: clamp(1.35rem, 4vw, 1.65rem);
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.35rem;
@@ -451,11 +621,27 @@ main.dot-texture-bg {
   margin-top: 0.75rem;
 }
 
+.portfolio-item-highlights {
+  margin: 0.75rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.portfolio-item-highlights li {
+  margin-bottom: 0.35rem;
+}
+
+.portfolio-item-highlights li:last-child {
+  margin-bottom: 0;
+}
+
 /* ============================================
    CONTACT SECTION
    ============================================ */
 .contact-section {
-  min-height: 100vh;
+  min-height: calc(100vh - var(--footer-height) - var(--header-height));
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -646,22 +832,33 @@ main.dot-texture-bg {
    FOOTER
    ============================================ */
 footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--chrome-band);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  overflow: hidden;
   background-color: var(--secondary-dark);
-  padding: 1rem 3rem;
-  margin-top: auto;
   border-top: 1px solid var(--surface-card);
 }
 
 .footer-container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem 2rem;
+  padding: 0 1rem;
+  min-height: 0;
 }
 
 .footer-content {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  gap: 1rem;
+  align-items: center;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -669,14 +866,16 @@ footer {
 .footer-section {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 0.15rem;
+  min-height: 0;
 }
 
 .footer-section h3 {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.1rem;
 }
 
 .footer-section p {
@@ -713,6 +912,13 @@ footer {
    RESPONSIVE DESIGN
    ============================================ */
 @media (max-width: 768px) {
+  :root {
+    /* Nav wraps + footer grid; one value keeps body padding even */
+    --chrome-band: 180px;
+    --footer-height: var(--chrome-band);
+    --header-height: var(--chrome-band);
+  }
+
   .hero-content {
     flex-direction: column;
     gap: 2rem;
@@ -766,7 +972,7 @@ footer {
 
   .footer-content {
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    gap: 1.25rem;
   }
 
   .footer-copyright {
@@ -774,28 +980,21 @@ footer {
     justify-content: flex-start;
   }
 
-  .portfolio-item {
-    flex-direction: column;
-    padding: 1.5rem;
-    padding-top: calc(4px + 1.5rem);
+  .portfolio-carousel {
+    --carousel-arrow-gap: 0.65rem;
   }
 
-  .portfolio-item-content {
-    padding: 0;
-    padding-top: 1rem;
+  .portfolio-list {
+    --portfolio-gap: 1.25rem;
+    scroll-padding-inline: 0.25rem;
   }
 
   .portfolio-item-image-wrapper {
-    width: 100%;
-    min-height: 200px;
-    height: 250px;
-    border-radius: 0 0 8px 8px;
+    border-radius: 12px 12px 0 0;
   }
 
-  .portfolio-item-image-wrapper .portfolio-item-image {
-    width: 100%;
-    height: 100%;
-    min-height: 0;
+  .portfolio-item-content {
+    padding: 1.1rem 1.1rem 1.5rem;
   }
 
   .hero-buttons {
@@ -809,7 +1008,11 @@ footer {
   }
 
   header {
-    padding: 1rem;
+    padding: 0 1rem;
+  }
+
+  footer {
+    padding: 0 1rem;
   }
 
   .container {

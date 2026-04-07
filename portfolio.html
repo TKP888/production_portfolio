@@ -16,9 +16,13 @@
          ============================================ -->
     <header>
       <nav>
-        <a href="index.html" class="logo"
-          >Saul Roland - Production Professional</a
-        >
+        <a href="index.html" class="logo">
+          <img
+            src="assets/SR%20Logo.png"
+            alt="Saul Roland - Production Professional"
+            class="logo-img"
+          />
+        </a>
         <ul class="nav-links">
           <li><a href="index.html">Home</a></li>
           <li><a href="portfolio.html" class="active">Portfolio</a></li>
@@ -31,11 +35,11 @@
             rel="noopener noreferrer"
             >View CV</a
           >
-          <a
+          <!-- <a
             href="portfolio.html#contact"
             class="btn btn-header btn-header-contact"
             >Contact Me</a
-          >
+          > -->
         </div>
       </nav>
     </header>
@@ -58,8 +62,46 @@
                  5. Update the project description in <p>
                  
                  To remove a project, delete the entire .portfolio-item div
+                 Optional: add <ul class="portfolio-item-highlights"> with <li> for bullet highlights.
                  ============================================ -->
-        <div class="portfolio-list">
+        <div class="portfolio-carousel" aria-label="Projects">
+          <button
+            type="button"
+            class="portfolio-carousel__btn portfolio-carousel__btn--prev"
+            aria-label="Previous projects"
+          >
+            <span aria-hidden="true">‹</span>
+          </button>
+          <div class="portfolio-list">
+          <!-- PROJECT ITEM 1 - Edit or duplicate this section -->
+          <div class="portfolio-item">
+            <div class="portfolio-item-image-wrapper">
+              <img
+                src="assets/portfolio/DelveDeep.avif"
+                alt="Project 1 Description"
+                class="portfolio-item-image"
+              />
+            </div>
+            <div class="portfolio-item-content">
+              <h2 class="portfolio-item-title">Delve Deep</h2>
+              <p class="portfolio-item-client">REMEDY Studios</p>
+              <p class="portfolio-item-meta">
+                <span class="portfolio-item-role">Project Manager</span>
+                <span class="portfolio-item-dates">2025–2026</span>
+              </p>
+              <p class="portfolio-item-overview">
+                I am currently working as the sole project manager for Delve
+                Deep, a dungeon crawler mixing elements of Diablo and XCOM. I am
+                managing a small team of other students using Basecamp as our
+                management tool. I run weekly sprints, ensuring milestones are
+                met.
+              </p>
+              <ul class="portfolio-item-highlights">
+                <li>Weekly sprints and milestone tracking</li>
+                <li>Team coordination with Basecamp</li>
+              </ul>
+            </div>
+          </div>
           <!-- PROJECT ITEM 1 - Edit or duplicate this section -->
           <div class="portfolio-item">
             <div class="portfolio-item-image-wrapper">
@@ -150,10 +192,18 @@
                     Copy one of the .portfolio-item divs above and paste it here.
                     Update the image path, title, and description.
                 -->
+          </div>
+          <button
+            type="button"
+            class="portfolio-carousel__btn portfolio-carousel__btn--next"
+            aria-label="Next projects"
+          >
+            <span aria-hidden="true">›</span>
+          </button>
         </div>
       </div>
     </main>
-
+    <!-- 
     <section class="contact-section" id="contact">
       <div class="container">
         <div class="contact-cta" id="contactCta">
@@ -219,7 +269,7 @@
           </form>
         </div>
       </div>
-    </section>
+    </section> -->
 
     <!-- ============================================
          FOOTER - Edit contact information here
@@ -243,7 +293,7 @@
             <h3>Follow Me</h3>
             <p>
               <a
-                href="https://www.linkedin.com/in/your-profile"
+                href="https://www.linkedin.com/in/saul-roland/"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="linkedin-link"
