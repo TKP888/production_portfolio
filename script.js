@@ -153,6 +153,64 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // ============================================
+  // Mobile header – hamburger overlay menu
+  // ============================================
+  const navToggle = document.querySelector(".nav-toggle");
+  const mobileNav = document.getElementById("mobileNav");
+  const navClose = mobileNav ? mobileNav.querySelector(".nav-close") : null;
+  const mobileNavFirstLink = mobileNav
+    ? mobileNav.querySelector(".mobile-nav-links a")
+    : null;
+  var lastActiveElement = null;
+
+  function openMobileNav() {
+    if (!navToggle || !mobileNav) return;
+    lastActiveElement = document.activeElement;
+    mobileNav.removeAttribute("hidden");
+    document.body.classList.add("nav-open");
+    navToggle.setAttribute("aria-expanded", "true");
+    navToggle.setAttribute("aria-label", "Close menu");
+    if (mobileNavFirstLink) mobileNavFirstLink.focus();
+  }
+
+  function closeMobileNav() {
+    if (!navToggle || !mobileNav) return;
+    mobileNav.setAttribute("hidden", "");
+    document.body.classList.remove("nav-open");
+    navToggle.setAttribute("aria-expanded", "false");
+    navToggle.setAttribute("aria-label", "Open menu");
+    if (lastActiveElement && typeof lastActiveElement.focus === "function") {
+      lastActiveElement.focus();
+    } else {
+      navToggle.focus();
+    }
+  }
+
+  if (navToggle && mobileNav) {
+    navToggle.addEventListener("click", function () {
+      const isOpen = navToggle.getAttribute("aria-expanded") === "true";
+      if (isOpen) closeMobileNav();
+      else openMobileNav();
+    });
+  }
+
+  if (navClose) {
+    navClose.addEventListener("click", closeMobileNav);
+  }
+
+  if (mobileNav) {
+    mobileNav.addEventListener("click", function (e) {
+      if (e.target === mobileNav) closeMobileNav();
+    });
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (!mobileNav || mobileNav.hasAttribute("hidden")) return;
+    closeMobileNav();
+  });
+
+  // ============================================
   // Portfolio carousel – prev/next
   // ============================================
   const portfolioCarousel = document.querySelector(".portfolio-carousel");

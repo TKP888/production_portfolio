@@ -41,7 +41,34 @@
             >Contact Me</a
           > -->
         </div>
+
+        <button
+          type="button"
+          class="nav-toggle"
+          aria-controls="mobileNav"
+          aria-expanded="false"
+          aria-label="Open menu"
+        ></button>
       </nav>
+
+      <div class="mobile-nav-overlay" id="mobileNav" hidden>
+        <div class="mobile-nav-panel" role="dialog" aria-label="Menu">
+          <button type="button" class="nav-close" aria-label="Close menu">
+            <span aria-hidden="true">×</span>
+          </button>
+          <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="portfolio.html" class="active">Portfolio</a></li>
+          </ul>
+          <a
+            href="assets/cv.pdf"
+            class="btn btn-header btn-header-cv"
+            target="_blank"
+            rel="noopener noreferrer"
+            >View CV</a
+          >
+        </div>
+      </div>
     </header>
 
     <!-- ============================================
