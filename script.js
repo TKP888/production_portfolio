@@ -234,23 +234,23 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function updateCarouselUi() {
-          const maxScroll = Math.max(
+          var maxScroll = Math.max(
             0,
             portfolioList.scrollWidth - portfolioList.clientWidth
           );
-          const left = portfolioList.scrollLeft;
+          var left = portfolioList.scrollLeft;
           prevBtn.disabled = left <= 1;
           nextBtn.disabled = left >= maxScroll - 1;
         }
 
         prevBtn.addEventListener("click", function () {
-          const delta = getScrollDelta();
+          var delta = getScrollDelta();
           if (delta) {
             portfolioList.scrollBy({ left: -delta, behavior: "smooth" });
           }
         });
         nextBtn.addEventListener("click", function () {
-          const delta = getScrollDelta();
+          var delta = getScrollDelta();
           if (delta) {
             portfolioList.scrollBy({ left: delta, behavior: "smooth" });
           }
@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function () {
         portfolioList.addEventListener("scroll", updateCarouselUi);
         window.addEventListener("resize", updateCarouselUi);
         if (window.ResizeObserver) {
-          const portfolioRo = new ResizeObserver(updateCarouselUi);
+          var portfolioRo = new ResizeObserver(updateCarouselUi);
           portfolioRo.observe(portfolioList);
         }
         updateCarouselUi();

@@ -638,7 +638,7 @@ main.dot-texture-bg {
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
 }
 
 .portfolio-item-meta {
@@ -981,6 +981,36 @@ footer {
     min-height: 0;
   }
 
+  /* Portfolio page: no body/main vertical scroll; band between header/footer */
+  html:has(body.page-portfolio) {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body.page-portfolio {
+    height: 100vh;
+    max-height: 100vh;
+    min-height: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  body.page-portfolio main.dot-texture-bg {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body.page-portfolio main.dot-texture-bg > .container {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
   .logo-img {
     height: 32px;
     width: auto;
@@ -1306,21 +1336,79 @@ footer {
     justify-content: flex-start;
   }
 
+  /* Portfolio carousel: fills main band; no outer vertical scroll */
+  main.dot-texture-bg > .container {
+    justify-content: flex-start;
+    padding: 0.65rem 1rem 0.65rem;
+    box-sizing: border-box;
+  }
+
   .portfolio-carousel {
-    --carousel-arrow-gap: 0.65rem;
+    --carousel-arrow-gap: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+    margin: 0 0.5rem 0;
+    overflow-x: clip;
+    overflow-y: visible;
+    box-sizing: border-box;
+  }
+
+  .portfolio-carousel__btn {
+    display: none;
   }
 
   .portfolio-list {
     --portfolio-gap: 1.25rem;
     scroll-padding-inline: 0.25rem;
+    flex: 1 1 0;
+    min-height: 0;
+    align-self: stretch;
+    padding: 0.25rem 0 0;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
 
+  /* Narrower slides; body text tightened below; cqw for image sizing */
+  .portfolio-item {
+    container-type: inline-size;
+    flex: 0 0 calc(100% * 0.88);
+    width: calc(100% * 0.88);
+    min-height: 0;
+    max-height: 100%;
+  }
+
+  /* +20px vs previous 92% × 5:2 band; cqw matches card width */
   .portfolio-item-image-wrapper {
     border-radius: 12px 12px 0 0;
+    width: min(100cqw, calc(92cqw + 30px));
+    height: calc(min(100cqw, 92cqw + 20px) / 2.5 + 35px);
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    aspect-ratio: unset;
   }
 
   .portfolio-item-content {
-    padding: 1.1rem 1.1rem 1.5rem;
+    padding: 1rem 0.95rem 1.35rem;
+  }
+
+  .portfolio-item-overview {
+    font-size: 0.775rem;
+    line-height: 1.6;
+  }
+
+  .portfolio-item-highlights {
+    font-size: 0.775rem;
+    line-height: 1.45;
+  }
+
+  .portfolio-item-meta {
+    font-size: 0.8125rem;
   }
 
   .btn {
@@ -1412,5 +1500,12 @@ footer {
   .footer-copyright {
     text-align: left;
     justify-content: flex-start;
+  }
+}
+
+/* Compact phones (iPhone 14 class ~390px); tweak max-width to exclude 430px-wide models if needed */
+@media (max-width: 430px) {
+  html {
+    zoom: 0.95;
   }
 }
