@@ -1386,7 +1386,7 @@ footer {
   /* +20px vs previous 92% × 5:2 band; cqw matches card width */
   .portfolio-item-image-wrapper {
     border-radius: 8px 8px 0 0;
-    width: min(100cqw, calc(92cqw + 30px));
+    width: min(100cqw, calc(92cqw + 60px));
     height: calc(min(100cqw, 92cqw + 20px) / 2.5 + 35px);
     max-width: 100%;
     margin-left: auto;
