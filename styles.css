@@ -603,7 +603,7 @@ main.dot-texture-bg {
   height: auto;
   min-height: 0;
   overflow: hidden;
-  border-radius: 8px 8px 0 0;
+  /* border-radius: 6px 6px 0 0; */
 }
 
 .portfolio-item-image-wrapper .portfolio-item-image {
@@ -1195,7 +1195,7 @@ footer {
 
   .viewport-top main {
     justify-content: flex-start;
-    padding-bottom: 1rem;
+    /* padding-bottom: 1rem; */
   }
 
   /* Index home hero: no inner scroll (fits within viewport band) */
@@ -1278,6 +1278,7 @@ footer {
     width: 100%;
     max-width: 100%;
     gap: 0.5rem;
+    padding-bottom: 2rem;
   }
 
   .hero-buttons .btn {
@@ -1384,7 +1385,7 @@ footer {
 
   /* +20px vs previous 92% × 5:2 band; cqw matches card width */
   .portfolio-item-image-wrapper {
-    border-radius: 12px 12px 0 0;
+    border-radius: 8px 8px 0 0;
     width: min(100cqw, calc(92cqw + 30px));
     height: calc(min(100cqw, 92cqw + 20px) / 2.5 + 35px);
     max-width: 100%;
