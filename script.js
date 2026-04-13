@@ -180,7 +180,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // ============================================
   const navToggle = document.querySelector(".nav-toggle");
   const mobileNav = document.getElementById("mobileNav");
-  const navClose = mobileNav ? mobileNav.querySelector(".nav-close") : null;
   const mobileNavFirstLink = mobileNav
     ? mobileNav.querySelector(".mobile-nav-links a")
     : null;
@@ -215,10 +214,6 @@ document.addEventListener("DOMContentLoaded", function () {
       if (isOpen) closeMobileNav();
       else openMobileNav();
     });
-  }
-
-  if (navClose) {
-    navClose.addEventListener("click", closeMobileNav);
   }
 
   if (mobileNav) {
