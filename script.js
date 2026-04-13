@@ -232,6 +232,18 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!mobileNav || mobileNav.hasAttribute("hidden")) return;
     closeMobileNav();
   });
+
+  if (mobileNav) {
+    mobileNav.querySelectorAll(".mobile-nav-links a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        closeMobileNav();
+      });
+    });
+  }
+
+  window.addEventListener("pageshow", function (e) {
+    if (e.persisted) closeMobileNav();
+  });
 });
 
 // ============================================
