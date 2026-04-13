@@ -24,9 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // If current year is different from start year, show range
     if (currentYear > startYear) {
-      copyrightElement.innerHTML = `© Saul Roland ${startYear}-${currentYear}.<br>All rights reserved.`;
-    } else {
-      copyrightElement.innerHTML = `© Saul Roland ${startYear}.<br>All rights reserved.`;
+      copyrightElement.innerHTML = `© Saul Roland ${currentYear}.<br>All rights reserved.`;
     }
   }
 
@@ -42,9 +40,16 @@ document.addEventListener("DOMContentLoaded", function () {
   function showContactForm() {
     if (!contactFormWrapper || !contactCta) return;
     contactFormWrapper.removeAttribute("hidden");
-    contactFormWrapper.classList.remove("contact-form-wrapper--closing", "contact-form-wrapper--open");
+    contactFormWrapper.classList.remove(
+      "contact-form-wrapper--closing",
+      "contact-form-wrapper--open",
+    );
     contactFormWrapper.classList.add("contact-form-wrapper--opening");
-    contactCta.classList.remove("contact-cta--hidden", "contact-cta--visible", "contact-cta--showing");
+    contactCta.classList.remove(
+      "contact-cta--hidden",
+      "contact-cta--visible",
+      "contact-cta--showing",
+    );
     contactCta.classList.add("contact-cta--hiding");
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
@@ -59,32 +64,46 @@ document.addEventListener("DOMContentLoaded", function () {
         contactCta.classList.add("contact-cta--hidden");
         contactCta.classList.remove("contact-cta--hiding");
       },
-      { once: false }
+      { once: false },
     );
     contactFormWrapper.addEventListener(
       "transitionend",
       function formFadeInDone(e) {
-        if (e.target !== contactFormWrapper || e.propertyName !== "opacity") return;
+        if (e.target !== contactFormWrapper || e.propertyName !== "opacity")
+          return;
         contactFormWrapper.removeEventListener("transitionend", formFadeInDone);
-        contactFormWrapper.classList.remove("contact-form-wrapper--opening", "contact-form-wrapper--open");
+        contactFormWrapper.classList.remove(
+          "contact-form-wrapper--opening",
+          "contact-form-wrapper--open",
+        );
         if (contactNameInput) contactNameInput.focus();
       },
-      { once: false }
+      { once: false },
     );
   }
 
   function showContactCta() {
     if (contactCta) {
-      contactCta.classList.remove("contact-cta--hidden", "contact-cta--hiding", "contact-cta--showing", "contact-cta--visible");
+      contactCta.classList.remove(
+        "contact-cta--hidden",
+        "contact-cta--hiding",
+        "contact-cta--showing",
+        "contact-cta--visible",
+      );
     }
     if (contactFormWrapper) {
-      contactFormWrapper.classList.remove("contact-form-wrapper--opening", "contact-form-wrapper--open", "contact-form-wrapper--closing");
+      contactFormWrapper.classList.remove(
+        "contact-form-wrapper--opening",
+        "contact-form-wrapper--open",
+        "contact-form-wrapper--closing",
+      );
       contactFormWrapper.setAttribute("hidden", "");
     }
   }
 
   function animateBackToCta() {
-    if (!contactFormWrapper || contactFormWrapper.hasAttribute("hidden")) return;
+    if (!contactFormWrapper || contactFormWrapper.hasAttribute("hidden"))
+      return;
     contactFormWrapper.classList.add("contact-form-wrapper--closing");
     var revealed = false;
 
@@ -105,20 +124,24 @@ document.addEventListener("DOMContentLoaded", function () {
         function onCtaShow(e) {
           if (e.target !== contactCta || e.propertyName !== "opacity") return;
           contactCta.removeEventListener("transitionend", onCtaShow);
-          contactCta.classList.remove("contact-cta--showing", "contact-cta--visible");
+          contactCta.classList.remove(
+            "contact-cta--showing",
+            "contact-cta--visible",
+          );
         },
-        { once: false }
+        { once: false },
       );
     }
 
     contactFormWrapper.addEventListener(
       "transitionend",
       function onFormClose(e) {
-        if (e.target !== contactFormWrapper || e.propertyName !== "opacity") return;
+        if (e.target !== contactFormWrapper || e.propertyName !== "opacity")
+          return;
         contactFormWrapper.removeEventListener("transitionend", onFormClose);
         revealCta();
       },
-      { once: true }
+      { once: true },
     );
     setTimeout(revealCta, 350);
   }
@@ -146,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
           });
         },
-        { threshold: 0.1 }
+        { threshold: 0.1 },
       );
       contactObserver.observe(contactSection);
     }
@@ -209,63 +232,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!mobileNav || mobileNav.hasAttribute("hidden")) return;
     closeMobileNav();
   });
-
-  // ============================================
-  // Portfolio carousel – prev/next
-  // ============================================
-  const portfolioCarousel = document.querySelector(".portfolio-carousel");
-  if (portfolioCarousel) {
-    const portfolioList = portfolioCarousel.querySelector(".portfolio-list");
-    const prevBtn = portfolioCarousel.querySelector(
-      ".portfolio-carousel__btn--prev"
-    );
-    const nextBtn = portfolioCarousel.querySelector(
-      ".portfolio-carousel__btn--next"
-    );
-    if (portfolioList && prevBtn && nextBtn) {
-      const items = portfolioList.querySelectorAll(".portfolio-item");
-      if (items.length > 0) {
-        function getScrollDelta() {
-          const item = items[0];
-          if (!item) return 0;
-          const gapStr = getComputedStyle(portfolioList).gap;
-          const gap = parseFloat(gapStr) || 0;
-          return item.offsetWidth + gap;
-        }
-
-        function updateCarouselUi() {
-          var maxScroll = Math.max(
-            0,
-            portfolioList.scrollWidth - portfolioList.clientWidth
-          );
-          var left = portfolioList.scrollLeft;
-          prevBtn.disabled = left <= 1;
-          nextBtn.disabled = left >= maxScroll - 1;
-        }
-
-        prevBtn.addEventListener("click", function () {
-          var delta = getScrollDelta();
-          if (delta) {
-            portfolioList.scrollBy({ left: -delta, behavior: "smooth" });
-          }
-        });
-        nextBtn.addEventListener("click", function () {
-          var delta = getScrollDelta();
-          if (delta) {
-            portfolioList.scrollBy({ left: delta, behavior: "smooth" });
-          }
-        });
-
-        portfolioList.addEventListener("scroll", updateCarouselUi);
-        window.addEventListener("resize", updateCarouselUi);
-        if (window.ResizeObserver) {
-          var portfolioRo = new ResizeObserver(updateCarouselUi);
-          portfolioRo.observe(portfolioList);
-        }
-        updateCarouselUi();
-      }
-    }
-  }
 });
 
 // ============================================

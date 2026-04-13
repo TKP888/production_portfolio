@@ -140,6 +140,24 @@ nav {
     overflow: hidden;
   }
 
+  /* Portfolio only (`main.dot-texture-bg`): allow vertical page scroll */
+  html:has(body.page-portfolio) {
+    overflow-y: auto;
+    height: auto;
+    min-height: 100%;
+  }
+
+  body.page-portfolio {
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  body.page-portfolio main.dot-texture-bg {
+    max-height: none;
+    overflow: visible;
+  }
+
   .logo-img {
     height: calc(0.9 * (3rem + 4px));
   }
@@ -241,12 +259,14 @@ main {
 
 /* Portfolio: fill viewport band below fixed header; wider column for carousel */
 main.dot-texture-bg > .container {
-  min-height: calc(100vh - var(--footer-height) - var(--header-height));
+  min-height: auto;
   flex-direction: column;
   width: 100%;
   max-width: min(1500px, 96vw);
-  justify-content: center;
+  justify-content: flex-start;
   align-items: stretch;
+  padding: clamp(1rem, 2vh, 2rem) clamp(1rem, 3vw, 1.5rem) clamp(2rem, 5vh, 3.5rem);
+  box-sizing: border-box;
 }
 
 /* ============================================
@@ -281,9 +301,10 @@ main.dot-texture-bg > .container {
   z-index: 1;
 }
 
-/* Portfolio page: main section fills viewport */
+/* Portfolio main: grows with content; page scrolls vertically */
 main.dot-texture-bg {
-  min-height: calc(100vh - var(--footer-height) - var(--header-height));
+  min-height: auto;
+  overflow: visible;
 }
 
 /* ============================================
@@ -437,114 +458,36 @@ main.dot-texture-bg {
   color: var(--text-primary);
 }
 
-.portfolio-carousel {
-  --portfolio-band: calc(100vh - var(--header-height) - var(--footer-height));
-  --carousel-arrow-gap: 0.85rem;
-  position: relative;
-  padding: 0;
-  margin-bottom: 0;
+.portfolio-section {
   width: 100%;
-  height: calc(var(--portfolio-band) * 0.9);
-  min-height: 0;
-  max-height: calc(var(--portfolio-band) * 0.9);
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  gap: var(--carousel-arrow-gap);
-}
-
-.portfolio-carousel__btn {
-  position: relative;
-  z-index: 5;
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  align-self: center;
-  border-radius: 50%;
-  border: 1px solid var(--surface-card);
-  background: var(--secondary-dark);
-  color: var(--text-primary);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  margin: 0;
   padding: 0;
-  line-height: 0;
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-}
-
-.portfolio-carousel__icon {
-  display: block;
-  width: 22px;
-  height: 22px;
-  flex-shrink: 0;
-}
-
-.portfolio-carousel__btn:hover {
-  background: var(--surface-card);
-  color: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-}
-
-.portfolio-carousel__btn:focus-visible {
-  outline: 2px solid var(--surface-card);
-  outline-offset: 3px;
-}
-
-.portfolio-carousel__btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-  pointer-events: none;
+  box-sizing: border-box;
 }
 
 .portfolio-list {
   --portfolio-gap: 1.5rem;
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  flex-direction: column;
   align-items: stretch;
   gap: var(--portfolio-gap);
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
   width: 100%;
-  padding: 0.5rem 0;
-  margin-bottom: 0;
-  scroll-behavior: smooth;
-  scroll-snap-type: none;
-  scroll-padding-inline: 0.5rem;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.portfolio-list::-webkit-scrollbar {
-  display: none;
+  overflow: visible;
+  padding: 0.5rem 0 0;
+  margin: 0;
 }
 
 .portfolio-item {
   position: relative;
-  flex: 0 0 calc((100% - 2 * var(--portfolio-gap)) / 3 * 1.25);
-  width: calc((100% - 2 * var(--portfolio-gap)) / 3 * 1.25);
-  max-width: none;
+  width: 100%;
+  max-width: 100%;
   min-height: 0;
-  height: 100%;
-  scroll-snap-align: start;
   background-color: var(--secondary-dark);
   border-radius: 12px;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: stretch;
   gap: 0;
   padding: 0;
   padding-top: 4px;
@@ -554,21 +497,10 @@ main.dot-texture-bg {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
-@media (max-width: 900px) {
-  .portfolio-list {
-    --portfolio-gap: 1.25rem;
-  }
-
-  .portfolio-item {
-    flex: 0 0 calc((100% - 1 * var(--portfolio-gap)) / 2 * 1.25);
-    width: calc((100% - 1 * var(--portfolio-gap)) / 2 * 1.25);
-  }
-}
-
 @media (max-width: 600px) {
   .portfolio-item {
-    flex: 0 0 calc(100% * 1.25);
-    width: calc(100% * 1.25);
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 
@@ -597,32 +529,57 @@ main.dot-texture-bg {
 }
 
 .portfolio-item-image-wrapper {
-  flex-shrink: 0;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  height: auto;
-  min-height: 0;
+  flex: 0 0 clamp(180px, 34%, 400px);
+  width: clamp(180px, 34%, 400px);
+  max-width: 100%;
+  min-width: 0;
+  min-height: 200px;
   overflow: hidden;
-  /* border-radius: 6px 6px 0 0; */
+  align-self: stretch;
+}
+
+.portfolio-item-image-wrapper a {
+  display: block;
+  height: 100%;
+  min-height: 200px;
 }
 
 .portfolio-item-image-wrapper .portfolio-item-image {
   width: 100%;
   height: 100%;
-  min-height: 0;
+  min-height: 200px;
   object-fit: cover;
   object-position: center center;
 }
 
+@media (max-width: 600px) {
+  .portfolio-item-image-wrapper {
+    flex: 0 0 auto;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+  }
+
+  .portfolio-item-image-wrapper a {
+    min-height: 0;
+    height: 100%;
+  }
+
+  .portfolio-item-image-wrapper .portfolio-item-image {
+    min-height: 0;
+    height: 100%;
+  }
+}
+
 .portfolio-item-content {
   flex: 1;
+  min-width: 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  overflow-y: auto;
+  overflow: visible;
   padding: 1.25rem 1.25rem 1.75rem;
-  width: 100%;
   box-sizing: border-box;
 }
 
@@ -981,32 +938,34 @@ footer {
     min-height: 0;
   }
 
-  /* Portfolio page: no body/main vertical scroll; band between header/footer */
+  /* Portfolio page: document scrolls vertically */
   html:has(body.page-portfolio) {
-    height: 100%;
-    overflow: hidden;
+    height: auto;
+    min-height: 100%;
+    overflow-y: auto;
   }
 
   body.page-portfolio {
-    height: 100vh;
-    max-height: 100vh;
-    min-height: 0;
-    overflow: hidden;
-    overscroll-behavior: none;
+    height: auto;
+    min-height: 100%;
+    max-height: none;
+    overflow-y: auto;
+    overscroll-behavior: auto;
   }
 
   body.page-portfolio main.dot-texture-bg {
     flex: 1 1 auto;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
+    max-height: none;
     display: flex;
     flex-direction: column;
   }
 
   body.page-portfolio main.dot-texture-bg > .container {
-    flex: 1;
+    flex: 0 1 auto;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
     display: flex;
     flex-direction: column;
   }
@@ -1337,61 +1296,20 @@ footer {
     justify-content: flex-start;
   }
 
-  /* Portfolio carousel: fills main band; no outer vertical scroll */
+  /* Portfolio: vertical list spacing and type scale on small screens */
   main.dot-texture-bg > .container {
     justify-content: flex-start;
-    padding: 0.65rem 1rem 0.65rem;
+    padding: 0.75rem 1rem 1.5rem;
     box-sizing: border-box;
   }
 
-  .portfolio-carousel {
-    --carousel-arrow-gap: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    flex: 1;
-    min-height: 0;
-    height: auto;
-    max-height: none;
-    margin: 0 0.5rem 0;
-    overflow-x: clip;
-    overflow-y: visible;
-    box-sizing: border-box;
-  }
-
-  .portfolio-carousel__btn {
-    display: none;
+  .portfolio-section {
+    margin: 0;
   }
 
   .portfolio-list {
     --portfolio-gap: 1.25rem;
-    scroll-padding-inline: 0.25rem;
-    flex: 1 1 0;
-    min-height: 0;
-    align-self: stretch;
-    padding: 0.25rem 0 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-
-  /* Narrower slides; body text tightened below; cqw for image sizing */
-  .portfolio-item {
-    container-type: inline-size;
-    flex: 0 0 calc(100% * 0.88);
-    width: calc(100% * 0.88);
-    min-height: 0;
-    max-height: 100%;
-  }
-
-  /* +20px vs previous 92% × 5:2 band; cqw matches card width */
-  .portfolio-item-image-wrapper {
-    border-radius: 8px 8px 0 0;
-    width: min(100cqw, calc(92cqw + 60px));
-    height: calc(min(100cqw, 92cqw + 20px) / 2.5 + 35px);
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    aspect-ratio: unset;
+    padding-top: 0.25rem;
   }
 
   .portfolio-item-content {
