@@ -38,9 +38,9 @@
               rel="noopener noreferrer"
               >View CV</a
             >
-            <!-- <a href="#contact" class="btn btn-header btn-header-contact"
+            <a href="#contact" class="btn btn-header btn-header-contact"
               >Contact Me</a
-            > -->
+            >
           </div>
 
           <button
@@ -64,6 +64,11 @@
                   target="_blank"
                   rel="noopener noreferrer"
                   >View CV</a
+                >
+              </li>
+              <li>
+                <a href="#contact" class="btn btn-header btn-header-contact"
+                  >Contact Me</a
                 >
               </li>
             </ul>
@@ -132,101 +137,103 @@
     <section class="contact-section" id="contact">
       <div class="container">
         <div class="contact-interactive">
-        <div class="contact-cta" id="contactCta">
-          <div
-            class="contact-cta-panel contact-cta-panel--visible"
-            id="contactCtaDefault"
-            aria-hidden="false"
-          >
-            <h2>
-              Have projects in mind?<br />Let's work
-              <span class="contact-cta-highlight">together</span>
-            </h2>
-            <p class="contact-cta-tagline">
-              I'm Saul Roland, a production professional who works with teams to
-              bring creative visions to life.
-            </p>
-            <button
-              type="button"
-              class="btn contact-cta-button"
-              id="contactRevealBtn"
+          <div class="contact-cta" id="contactCta">
+            <div
+              class="contact-cta-panel contact-cta-panel--visible"
+              id="contactCtaDefault"
+              aria-hidden="false"
             >
-              Get in touch
-            </button>
-          </div>
-          <div
-            class="contact-cta-panel"
-            id="contactCtaThanks"
-            aria-hidden="true"
-          >
-            <h2>
-              Thank you<span class="contact-cta-highlight">.</span>
-            </h2>
-            <p class="contact-cta-tagline">
-              Your message has been sent. I'll get back to you soon.
-            </p>
-            <button
-              type="button"
-              class="btn contact-cta-button"
-              id="contactSendAnotherBtn"
+              <h2>
+                Have projects in mind?<br />Let's work
+                <span class="contact-cta-highlight">together</span>
+              </h2>
+              <p class="contact-cta-tagline">
+                I'm Saul Roland, a production professional who works with teams
+                to bring creative visions to life.
+              </p>
+              <button
+                type="button"
+                class="btn contact-cta-button"
+                id="contactRevealBtn"
+              >
+                Get in touch
+              </button>
+            </div>
+            <div
+              class="contact-cta-panel"
+              id="contactCtaThanks"
+              aria-hidden="true"
             >
-              Send another message
-            </button>
+              <h2>Thank you<span class="contact-cta-highlight">.</span></h2>
+              <p class="contact-cta-tagline">
+                Your message has been sent. I'll get back to you soon.
+              </p>
+              <button
+                type="button"
+                class="btn contact-cta-button"
+                id="contactSendAnotherBtn"
+              >
+                Send another message
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="contact-form-wrapper" id="contactFormWrapper" hidden>
-          <h2>Contact Me</h2>
-          <p class="contact-intro">
-            If you have any questions or would like to get in touch, please use
-            the form below.
-          </p>
-          <form
-            class="contact-form"
-            action="https://formspree.io/f/mojydgyj"
-            method="POST"
-          >
-            <label for="contact-name">Name</label>
-            <input
-              type="text"
-              id="contact-name"
-              name="name"
-              placeholder="Your Name"
-              required
-            />
-            <label for="contact-email">Email Address</label>
-            <input
-              type="email"
-              id="contact-email"
-              name="email"
-              placeholder="Your Email"
-              required
-            />
-            <label for="contact-subject">Subject</label>
-            <input
-              type="text"
-              id="contact-subject"
-              name="subject"
-              placeholder="Subject"
-            />
-            <label for="contact-message">Message</label>
-            <textarea
-              id="contact-message"
-              name="message"
-              placeholder="Your Message"
-              rows="5"
-              required
-            ></textarea>
-            <p
-              class="contact-form-error"
-              id="contactFormError"
-              role="alert"
-              hidden
-            ></p>
-            <button type="submit" class="btn btn-primary" id="contactSubmitBtn">
-              Send Message
-            </button>
-          </form>
-        </div>
+          <div class="contact-form-wrapper" id="contactFormWrapper" hidden>
+            <h2>Contact Me</h2>
+            <p class="contact-intro">
+              If you have any questions or would like to get in touch, please
+              use the form below.
+            </p>
+            <form
+              class="contact-form"
+              action="https://formspree.io/f/mojydgyj"
+              method="POST"
+            >
+              <label for="contact-name">Name</label>
+              <input
+                type="text"
+                id="contact-name"
+                name="name"
+                placeholder="Your Name"
+                required
+              />
+              <label for="contact-email">Email Address</label>
+              <input
+                type="email"
+                id="contact-email"
+                name="email"
+                placeholder="Your Email"
+                required
+              />
+              <label for="contact-subject">Subject</label>
+              <input
+                type="text"
+                id="contact-subject"
+                name="subject"
+                placeholder="Subject"
+              />
+              <label for="contact-message">Message</label>
+              <textarea
+                id="contact-message"
+                name="message"
+                placeholder="Your Message"
+                rows="5"
+                required
+              ></textarea>
+              <p
+                class="contact-form-error"
+                id="contactFormError"
+                role="alert"
+                hidden
+              ></p>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                id="contactSubmitBtn"
+              >
+                Send Message
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </section>

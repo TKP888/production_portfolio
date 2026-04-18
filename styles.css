@@ -3,6 +3,8 @@
    ============================================ */
 :root {
   --primary-dark: #1a1324;
+  /* Used by header Contact Me (.btn-header-contact); alias for dark text on gold */
+  --primary: var(--primary-dark);
   --secondary-dark: #241a34;
   --surface-card: #eea302;
   --text-primary: #f5f2fa;
@@ -287,7 +289,8 @@ main.dot-texture-bg > .container {
   max-width: min(1500px, 96vw);
   justify-content: flex-start;
   align-items: stretch;
-  padding: clamp(1rem, 2vh, 2rem) clamp(1rem, 3vw, 1.5rem) clamp(2rem, 5vh, 3.5rem);
+  padding: clamp(1rem, 2vh, 2rem) clamp(1rem, 3vw, 1.5rem)
+    clamp(2rem, 5vh, 3.5rem);
   box-sizing: border-box;
 }
 
@@ -1239,19 +1242,26 @@ footer {
     text-underline-offset: 0.35rem;
   }
 
+  /* View CV + Contact Me: same footprint (width/height); border-box aligned */
+  .mobile-nav-links a.mobile-nav-cv,
+  .mobile-nav-links a.btn.btn-header.btn-header-contact {
+    box-sizing: border-box;
+    width: min(100%, 12rem);
+    min-height: 3.5rem;
+  }
+
   /* Match desktop header .btn-header + .btn-header-cv */
   .mobile-nav-links a.mobile-nav-cv {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: 8px;
+    text-align: center;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: auto;
-    max-width: 100%;
-    padding: 0.65rem 1.15rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    line-height: 1;
     border: 2px solid var(--surface-card);
-    border-radius: 8px;
     background-color: transparent;
     color: var(--text-primary);
   }
@@ -1262,6 +1272,36 @@ footer {
     color: var(--text-primary);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Contact Me: gold fill; transparent border matches View CV outer size */
+  .mobile-nav-links a.btn.btn-header.btn-header-contact {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: 8px;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--surface-card);
+    color: var(--primary-dark);
+    border: 2px solid transparent;
+    box-shadow: none;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .mobile-nav-links a.btn.btn-header.btn-header-contact:hover,
+  .mobile-nav-links a.btn.btn-header.btn-header-contact:focus-visible {
+    color: var(--primary-dark);
+    background-color: var(--surface-card);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   body.nav-open {
@@ -1375,7 +1415,8 @@ footer {
     gap: 0.75rem;
   }
 
-  .btn-header {
+  /* Only header row buttons; mobile overlay Contact Me also uses .btn-header */
+  .header-actions .btn-header {
     width: 100%;
     max-width: 300px;
     justify-content: center;
