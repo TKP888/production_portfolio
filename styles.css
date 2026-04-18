@@ -158,6 +158,28 @@ nav {
     overflow: visible;
   }
 
+  /* Home: allow vertical scroll to contact + footer (same document model as portfolio) */
+  html:has(body.page-home) {
+    overflow-y: auto;
+    height: auto;
+    min-height: 100%;
+  }
+
+  body.page-home {
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  body.page-home main.dot-texture-bg {
+    max-height: none;
+    overflow: visible;
+  }
+
+  body.page-home .viewport-top {
+    overflow: visible;
+  }
+
   .logo-img {
     height: calc(0.9 * (3rem + 4px));
   }
@@ -641,6 +663,8 @@ main.dot-texture-bg {
    CONTACT SECTION
    ============================================ */
 .contact-section {
+  --contact-state-duration: 0.5s;
+  --contact-state-ease: cubic-bezier(0.4, 0, 0.2, 1);
   min-height: calc(100vh - var(--footer-height) - var(--header-height));
   display: flex;
   flex-direction: column;
@@ -650,20 +674,92 @@ main.dot-texture-bg {
   border-top: 1px solid rgba(238, 163, 2, 0.2);
 }
 
-/* CTA block (visible by default) */
+/* Stack CTA + form vertically; global .container defaults to row flex */
+.contact-section .container {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+}
+
+/* CTA + form share one grid cell (in-place crossfade, no vertical stack shift) */
+.contact-interactive {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  align-items: start;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.contact-interactive .contact-cta,
+.contact-interactive .contact-form-wrapper {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+}
+
+.contact-interactive .contact-cta {
+  position: relative;
+  z-index: 1;
+}
+
+.contact-interactive .contact-form-wrapper:not([hidden]) {
+  position: relative;
+  z-index: 2;
+}
+
+/* CTA block (visible by default); panels stack in one grid cell for crossfade */
 .contact-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  text-align: center;
+  transition:
+    opacity var(--contact-state-duration) var(--contact-state-ease),
+    transform var(--contact-state-duration) var(--contact-state-ease);
+  transform: translateY(0);
+}
+
+.contact-cta-panel {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
   gap: 1.25rem;
-  max-width: 640px;
-  margin: 0 auto;
-  transition: opacity 0.3s ease;
+  transition:
+    opacity var(--contact-state-duration) var(--contact-state-ease),
+    transform var(--contact-state-duration) var(--contact-state-ease);
+}
+
+.contact-cta-panel:not(.contact-cta-panel--visible) {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(0.5rem);
+  transition:
+    opacity var(--contact-state-duration) var(--contact-state-ease),
+    transform var(--contact-state-duration) var(--contact-state-ease),
+    visibility 0s linear var(--contact-state-duration);
+}
+
+.contact-cta-panel.contact-cta-panel--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition:
+    opacity var(--contact-state-duration) var(--contact-state-ease),
+    transform var(--contact-state-duration) var(--contact-state-ease),
+    visibility 0s;
 }
 
 .contact-cta--hiding {
   opacity: 0;
+  transform: translateY(0.5rem);
   pointer-events: none;
 }
 
@@ -673,10 +769,12 @@ main.dot-texture-bg {
 
 .contact-cta--showing {
   opacity: 0;
+  transform: translateY(0.5rem);
 }
 
 .contact-cta--showing.contact-cta--visible {
   opacity: 1;
+  transform: translateY(0);
 }
 
 .contact-cta h2 {
@@ -749,20 +847,35 @@ main.dot-texture-bg {
 }
 
 .contact-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding-top: 0.5rem;
-  transition: opacity 0.3s ease;
+  transition:
+    opacity var(--contact-state-duration) var(--contact-state-ease),
+    transform var(--contact-state-duration) var(--contact-state-ease);
+  transform: translateY(0);
 }
 
 .contact-form-wrapper.contact-form-wrapper--opening {
   opacity: 0;
+  transform: translateY(0.5rem);
 }
 
 .contact-form-wrapper.contact-form-wrapper--open {
   opacity: 1;
+  transform: translateY(0);
 }
 
 .contact-form-wrapper.contact-form-wrapper--closing {
   opacity: 0;
+  transform: translateY(0.5rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-section {
+    --contact-state-duration: 0.01ms;
+  }
 }
 
 .contact-form-wrapper h2 {
@@ -770,16 +883,23 @@ main.dot-texture-bg {
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.75rem;
+  width: 100%;
+  text-align: center;
 }
 
 .contact-intro {
   color: var(--text-muted);
   font-size: 1.1rem;
   margin-bottom: 2rem;
+  width: 100%;
+  text-align: center;
 }
 
 .contact-form {
+  width: 100%;
   max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -828,6 +948,22 @@ main.dot-texture-bg {
   margin-top: 0.5rem;
 }
 
+.contact-form-error {
+  color: #f0a8a8;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.contact-form-error:not([hidden]) {
+  margin-top: 0.25rem;
+}
+
+.contact-form .btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 /* ============================================
    FOOTER
    ============================================ */
@@ -856,7 +992,7 @@ footer {
 
 .footer-content {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   align-items: center;
   max-width: 1200px;
@@ -867,6 +1003,8 @@ footer {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
   gap: 0.15rem;
   min-height: 0;
 }
@@ -900,8 +1038,8 @@ footer {
 }
 
 .footer-copyright {
-  text-align: right;
-  justify-content: flex-end;
+  text-align: center;
+  align-items: center;
 }
 
 .footer-copyright p {
@@ -913,29 +1051,30 @@ footer {
    ============================================ */
 @media (max-width: 768px) {
   :root {
-    /* Header bar; footer is taller (2×2 grid) — decouple from --chrome-band */
+    /* Header bar; footer is taller (3-column grid) — decouple from --chrome-band */
     --chrome-band: 80px;
     --header-height: var(--chrome-band);
     --footer-height: 100px;
   }
 
-  /* Index only: lock document — hero band stays between fixed header/footer, no vertical scroll */
+  /* Home page: document scrolls vertically (hero band + contact + footer) */
   html:has(body.page-home) {
-    height: 100%;
-    overflow: hidden;
+    height: auto;
+    min-height: 100%;
+    overflow-y: auto;
   }
 
   body.page-home {
-    height: 100vh;
-    max-height: 100vh;
-    min-height: 0;
-    overflow: hidden;
-    overscroll-behavior: none;
+    height: auto;
+    min-height: 100%;
+    max-height: none;
+    overflow-y: auto;
+    overscroll-behavior: auto;
   }
 
   body.page-home .viewport-top {
-    overflow: hidden;
     min-height: 0;
+    overflow: hidden;
   }
 
   /* Portfolio page: document scrolls vertically */
@@ -1243,7 +1382,7 @@ footer {
   }
 
   .footer-content {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.5rem 0.65rem;
   }
 
@@ -1269,8 +1408,8 @@ footer {
   }
 
   .footer-copyright {
-    text-align: left;
-    justify-content: flex-start;
+    text-align: center;
+    align-items: center;
   }
 
   /* Portfolio: vertical list spacing and type scale on small screens */
@@ -1319,7 +1458,7 @@ footer {
     padding: 0.4rem 1rem;
     height: var(--footer-height);
     overflow: visible;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .container {
@@ -1386,16 +1525,10 @@ footer {
     font-size: 1.75rem;
   }
 
-  /* Same 2×2 grid; a touch tighter on very narrow screens */
+  /* Three columns; tighter on very narrow screens */
   .footer-content {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.45rem 0.55rem;
-    text-align: left;
-  }
-
-  .footer-copyright {
-    text-align: left;
-    justify-content: flex-start;
   }
 }
 

@@ -30,15 +30,72 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ============================================
   // Contact CTA – reveal form on button click; revert on back link or scroll away
+  // Form: Formspree via fetch (no redirect to hosted thank-you page)
   // ============================================
   const contactRevealBtn = document.getElementById("contactRevealBtn");
+  const contactSendAnotherBtn = document.getElementById("contactSendAnotherBtn");
   const contactCta = document.getElementById("contactCta");
+  const contactCtaDefault = document.getElementById("contactCtaDefault");
+  const contactCtaThanks = document.getElementById("contactCtaThanks");
   const contactFormWrapper = document.getElementById("contactFormWrapper");
+  const contactForm = document.querySelector(".contact-form");
+  const contactFormError = document.getElementById("contactFormError");
+  const contactSubmitBtn = document.getElementById("contactSubmitBtn");
   const contactNameInput = document.getElementById("contact-name");
   const contactSection = document.getElementById("contact");
 
-  function showContactForm() {
+  var thanksRevertTimer = null;
+
+  function clearThanksRevertTimer() {
+    if (thanksRevertTimer !== null) {
+      clearTimeout(thanksRevertTimer);
+      thanksRevertTimer = null;
+    }
+  }
+
+  /** After a successful submit, return to the main CTA after 5s unless the user interacts. */
+  function scheduleThanksRevert() {
+    clearThanksRevertTimer();
+    thanksRevertTimer = setTimeout(function () {
+      thanksRevertTimer = null;
+      setContactCtaMode("default");
+    }, 5000);
+  }
+
+  function setContactCtaMode(mode) {
+    if (!contactCtaDefault || !contactCtaThanks) return;
+    if (mode === "thanks") {
+      contactCtaDefault.classList.remove("contact-cta-panel--visible");
+      contactCtaThanks.classList.add("contact-cta-panel--visible");
+      contactCtaDefault.setAttribute("aria-hidden", "true");
+      contactCtaThanks.setAttribute("aria-hidden", "false");
+    } else {
+      contactCtaThanks.classList.remove("contact-cta-panel--visible");
+      contactCtaDefault.classList.add("contact-cta-panel--visible");
+      contactCtaThanks.setAttribute("aria-hidden", "true");
+      contactCtaDefault.setAttribute("aria-hidden", "false");
+    }
+  }
+
+  function clearContactFormError() {
+    if (!contactFormError) return;
+    contactFormError.textContent = "";
+    contactFormError.setAttribute("hidden", "");
+  }
+
+  function showContactFormError(message) {
+    if (!contactFormError) return;
+    contactFormError.textContent = message;
+    contactFormError.removeAttribute("hidden");
+  }
+
+  function showContactForm(fromThanks) {
     if (!contactFormWrapper || !contactCta) return;
+    clearThanksRevertTimer();
+    if (!fromThanks) {
+      setContactCtaMode("default");
+    }
+    clearContactFormError();
     contactFormWrapper.removeAttribute("hidden");
     contactFormWrapper.classList.remove(
       "contact-form-wrapper--closing",
@@ -59,7 +116,11 @@ document.addEventListener("DOMContentLoaded", function () {
     contactCta.addEventListener(
       "transitionend",
       function ctaFadeOutDone(e) {
-        if (e.target !== contactCta || e.propertyName !== "opacity") return;
+        if (
+          e.target !== contactCta ||
+          (e.propertyName !== "opacity" && e.propertyName !== "transform")
+        )
+          return;
         contactCta.removeEventListener("transitionend", ctaFadeOutDone);
         contactCta.classList.add("contact-cta--hidden");
         contactCta.classList.remove("contact-cta--hiding");
@@ -69,7 +130,10 @@ document.addEventListener("DOMContentLoaded", function () {
     contactFormWrapper.addEventListener(
       "transitionend",
       function formFadeInDone(e) {
-        if (e.target !== contactFormWrapper || e.propertyName !== "opacity")
+        if (
+          e.target !== contactFormWrapper ||
+          (e.propertyName !== "opacity" && e.propertyName !== "transform")
+        )
           return;
         contactFormWrapper.removeEventListener("transitionend", formFadeInDone);
         contactFormWrapper.classList.remove(
@@ -83,6 +147,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function showContactCta() {
+    clearThanksRevertTimer();
+    setContactCtaMode("default");
+    if (contactForm) contactForm.reset();
+    clearContactFormError();
+    if (contactSubmitBtn) contactSubmitBtn.disabled = false;
     if (contactCta) {
       contactCta.classList.remove(
         "contact-cta--hidden",
@@ -122,7 +191,11 @@ document.addEventListener("DOMContentLoaded", function () {
       contactCta.addEventListener(
         "transitionend",
         function onCtaShow(e) {
-          if (e.target !== contactCta || e.propertyName !== "opacity") return;
+          if (
+            e.target !== contactCta ||
+            (e.propertyName !== "opacity" && e.propertyName !== "transform")
+          )
+            return;
           contactCta.removeEventListener("transitionend", onCtaShow);
           contactCta.classList.remove(
             "contact-cta--showing",
@@ -136,18 +209,75 @@ document.addEventListener("DOMContentLoaded", function () {
     contactFormWrapper.addEventListener(
       "transitionend",
       function onFormClose(e) {
-        if (e.target !== contactFormWrapper || e.propertyName !== "opacity")
+        if (
+          e.target !== contactFormWrapper ||
+          (e.propertyName !== "opacity" && e.propertyName !== "transform")
+        )
           return;
         contactFormWrapper.removeEventListener("transitionend", onFormClose);
         revealCta();
       },
       { once: true },
     );
-    setTimeout(revealCta, 350);
+    setTimeout(revealCta, 550);
+  }
+
+  if (contactForm) {
+    contactForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      clearContactFormError();
+      if (contactSubmitBtn) contactSubmitBtn.disabled = true;
+      fetch(contactForm.action, {
+        method: "POST",
+        body: new FormData(contactForm),
+        headers: { Accept: "application/json" },
+      })
+        .then(function (response) {
+          return response.json().then(function (data) {
+            return { ok: response.ok, data: data };
+          });
+        })
+        .then(function (result) {
+          if (result.ok) {
+            contactForm.reset();
+            setContactCtaMode("thanks");
+            animateBackToCta();
+            scheduleThanksRevert();
+            return;
+          }
+          var msg = "Something went wrong. Please try again.";
+          var d = result.data;
+          if (d) {
+            if (typeof d.error === "string") {
+              msg = d.error;
+            } else if (Array.isArray(d.errors) && d.errors[0]) {
+              var err0 = d.errors[0];
+              if (err0 && typeof err0.message === "string") msg = err0.message;
+            }
+          }
+          showContactFormError(msg);
+        })
+        .catch(function () {
+          showContactFormError(
+            "Network error. Please check your connection and try again.",
+          );
+        })
+        .finally(function () {
+          if (contactSubmitBtn) contactSubmitBtn.disabled = false;
+        });
+    });
+  }
+
+  if (contactSendAnotherBtn) {
+    contactSendAnotherBtn.addEventListener("click", function () {
+      showContactForm(true);
+    });
   }
 
   if (contactRevealBtn && contactCta && contactFormWrapper) {
-    contactRevealBtn.addEventListener("click", showContactForm);
+    contactRevealBtn.addEventListener("click", function () {
+      showContactForm(false);
+    });
 
     document.addEventListener("click", function (e) {
       if (
