@@ -687,11 +687,10 @@ main.dot-texture-bg {
 
 /* CTA + form share one grid cell (in-place crossfade, no vertical stack shift) */
 .contact-interactive {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  justify-items: center;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  align-items: stretch;
   width: 100%;
   max-width: 640px;
   margin: 0 auto;
@@ -699,20 +698,10 @@ main.dot-texture-bg {
 
 .contact-interactive .contact-cta,
 .contact-interactive .contact-form-wrapper {
-  grid-column: 1;
-  grid-row: 1;
   width: 100%;
 }
 
-.contact-interactive .contact-cta {
-  position: relative;
-  z-index: 1;
-}
-
-.contact-interactive .contact-form-wrapper:not([hidden]) {
-  position: relative;
-  z-index: 2;
-}
+/* (No overlay needed; CTA and form stack vertically.) */
 
 /* CTA block (visible by default); panels stack in one grid cell for crossfade */
 .contact-cta {
